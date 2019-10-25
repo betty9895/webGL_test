@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+    <html lang="zh-tw">
+        <head>
+            <title>webGL_test</title>
+            <meta charset="utf-8">
+        </head>
+
+
+        <script id="vertex-shader" type="x-shader/x-vertex">
+            attribute  vec4 vPosition;
+            attribute  vec4 vColor;
+            varying vec4 fColor;
+
+            uniform mat4 modelViewMatrix;
+            uniform mat4 projectionMatrix;
+
+            void main()
+            {
+                fColor = vColor;
+                gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+            }
+        </script>
+
+        <script id="fragment-shader" type="x-shader/x-fragment">
+
+            precision mediump float;
+
+            varying  vec4 fColor;
+
+            void main()
+            {
+                gl_FragColor = fColor;
+            }
+        </script>
+
+        <script type="text/javascript" src="../Common/webgl-utils.js"></script>
+        <script type="text/javascript" src="../Common/initShaders.js"></script>
+        <script type="text/javascript" src="../Common/MV.js"></script>
+        <script type="text/javascript" src="robotArm.js"></script>
+
+
+    <!-- slider -->
+        <div>slider_bar_1 -180 
+            <input id="slider1" type="range" min="-180" max="180" step="10" value="0"/>
+            180
+        </div>
+        <br/>
+
+        <div>slider_bar_2 -180 
+            <input id="slider2" type="range" min="-180" max="180" step="10" value="0"  />
+            180
+        </div>
+        <br/>
+
+        <div>slider_bar_3 -180 
+            <input id="slider3" type="range" min="-180" max="180" step="10" value="0"  />
+            180
+        </div>
+        <br/>
+
+    <body>
+        <canvas id="gl-canvas" width="512"" height="512">
+            Oops ... your browser doesn't support the HTML5 canvas element
+        </canvas>
+    </body>
+</html>
