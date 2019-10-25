@@ -5,7 +5,7 @@
             <meta charset="utf-8">
         </head>
 
-
+        <!-- 頂點著色器 -->
         <script id="vertex-shader" type="x-shader/x-vertex">
             attribute  vec4 vPosition;
             attribute  vec4 vColor;
@@ -21,6 +21,7 @@
             }
         </script>
 
+        <!-- 著色器 -->
         <script id="fragment-shader" type="x-shader/x-fragment">
 
             precision mediump float;
@@ -36,31 +37,52 @@
         <script type="text/javascript" src="../Common/webgl-utils.js"></script>
         <script type="text/javascript" src="../Common/initShaders.js"></script>
         <script type="text/javascript" src="../Common/MV.js"></script>
-        <script type="text/javascript" src="robotArm.js"></script>
+        <script type="text/javascript" src="myCode.js"></script>
 
 
-    <!-- slider -->
-        <div>slider_bar_1 -180 
-            <input id="slider1" type="range" min="-180" max="180" step="10" value="0"/>
-            180
+    <!-- UI -->
+
+    <!--         <div>
+        <select id="select" size="3">
+            <option value="0">A</option>
+            <option value="1">B</option>
+            <option value="2">C</option>
+        </select>
+        </div> -->
+
+        <div>
+            acount
+            <input id="num" type="text" name="input" value="" >
         </div>
         <br/>
 
-        <div>slider_bar_2 -180 
-            <input id="slider2" type="range" min="-180" max="180" step="10" value="0"  />
-            180
-        </div>
+        <form name="rotation">rotation (-180,180)
+                <input id="slider1" name="input" type="range" min="-180" max="180" oninput="output.value = input.value">
+                <output id="slider1" name="output"></output>
+        </form>
+
         <br/>
 
-        <div>slider_bar_3 -180 
-            <input id="slider3" type="range" min="-180" max="180" step="10" value="0"  />
-            180
+        <form name="speed">speed (0,100)
+                <input id="slider2" name="input" type="range" min="0" max="100" oninput="output.value = input.value">
+                <output id="slider1" name="output"></output>
+        </form>
+
+        <br/>
+
+        <div>
+            <button id="reverseSpeed">reverse speed</button>
         </div>
+
         <br/>
 
     <body>
-        <canvas id="gl-canvas" width="512"" height="512">
+
+        <!-- WebGL canvas -->
+
+        <canvas id="gl-canvas" width="512" height="512">
             Oops ... your browser doesn't support the HTML5 canvas element
         </canvas>
+
     </body>
 </html>

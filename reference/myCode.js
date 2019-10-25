@@ -75,8 +75,6 @@ function quad(  a,  b,  c,  d ) {
     colors.push(vertexColors[a]);
     points.push(vertices[d]);
 }
-
-
 function colorCube() {
     quad( 1, 0, 3, 2 );
     quad( 2, 3, 7, 6 );
@@ -85,9 +83,6 @@ function colorCube() {
     quad( 4, 5, 6, 7 );
     quad( 5, 4, 0, 1 );
 }
-
-//____________________________________________
-
 // Remmove when scale in MV.js supports scale matrices
 
 function scale4(a, b, c) {
@@ -97,11 +92,6 @@ function scale4(a, b, c) {
    result[2][2] = c;
    return result;
 }
-
-
-//--------------------------------------------------
-
-
 window.onload = function init() {
 
     canvas = document.getElementById( "gl-canvas" );
@@ -146,14 +136,22 @@ window.onload = function init() {
     gl.vertexAttribPointer( vColor, 4, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vColor );
 
+
     document.getElementById("slider1").onchange = function(event) {
         theta[0] = event.target.value;
+        console.log("theta"+event.target.value)
     };
+
     document.getElementById("slider2").onchange = function(event) {
-         theta[1] = event.target.value;
+        
     };
-    document.getElementById("slider3").onchange = function(event) {
-         theta[2] =  event.target.value;
+
+    document.getElementById("num").onchange = function(event) {
+        
+    };
+
+    document.getElementById("reverseSpeed").onchange = function(event) {
+        
     };
 
     modelViewMatrixLoc = gl.getUniformLocation(program, "modelViewMatrix");
@@ -163,10 +161,6 @@ window.onload = function init() {
 
     render();
 }
-
-//----------------------------------------------------------------------------
-
-
 function base() {
     var s = scale4(BASE_WIDTH, BASE_HEIGHT, BASE_WIDTH);
     var instanceMatrix = mult( translate( 0.0, 0.5 * BASE_HEIGHT, 0.0 ), s);
@@ -174,47 +168,10 @@ function base() {
     gl.uniformMatrix4fv(modelViewMatrixLoc,  false, flatten(t) );
     gl.drawArrays( gl.TRIANGLES, 0, NumVertices );
 }
-
-//----------------------------------------------------------------------------
-
-
-function upperArm() {
-    var s = scale4(UPPER_ARM_WIDTH, UPPER_ARM_HEIGHT, UPPER_ARM_WIDTH);
-    var instanceMatrix = mult(translate( 0.0, 0.5 * UPPER_ARM_HEIGHT, 0.0 ),s);
-    var t = mult(modelViewMatrix, instanceMatrix);
-    gl.uniformMatrix4fv( modelViewMatrixLoc,  false, flatten(t) );
-    gl.drawArrays( gl.TRIANGLES, 0, NumVertices );
-}
-
-//----------------------------------------------------------------------------
-
-
-function lowerArm()
-{
-    var s = scale4(LOWER_ARM_WIDTH, LOWER_ARM_HEIGHT, LOWER_ARM_WIDTH);
-    var instanceMatrix = mult( translate( 0.0, 0.5 * LOWER_ARM_HEIGHT, 0.0 ), s);
-    var t = mult(modelViewMatrix, instanceMatrix);
-    gl.uniformMatrix4fv( modelViewMatrixLoc,  false, flatten(t) );
-    gl.drawArrays( gl.TRIANGLES, 0, NumVertices );
-}
-
-//----------------------------------------------------------------------------
-
-
 var render = function() {
 
     gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
-
     modelViewMatrix = rotate(theta[Base], 0, 1, 0 );
     base();
-
-    modelViewMatrix = mult(modelViewMatrix, translate(0.0, BASE_HEIGHT, 0.0));
-    modelViewMatrix = mult(modelViewMatrix, rotate(theta[LowerArm], 0, 0, 1 ));
-    lowerArm();
-
-    modelViewMatrix  = mult(modelViewMatrix, translate(0.0, LOWER_ARM_HEIGHT, 0.0));
-    modelViewMatrix  = mult(modelViewMatrix, rotate(theta[UpperArm], 0, 0, 1) );
-    upperArm();
-
     requestAnimFrame(render);
 }

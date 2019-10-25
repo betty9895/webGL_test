@@ -1,0 +1,123 @@
+
+<input type="range" name="rangeInput" min="0" max="100" onchange="updateTextInput(this.value);">
+<input type="text" id="textInput" value="">
+
+<form name="registrationForm">
+   <input type="range" name="ageInputName" id="ageInputId" value="24" min="1" max="100" oninput="ageOutputId.value = ageInputId.value">
+   <output name="ageOutputName" id="ageOutputId">24</output>
+</form>
+JsFiddle Demo
+
+If you want to show the value in text box, simply change output to input.
+
+Update:
+
+It is still Javascript written within your html, you can replace the bindings with below JS code:
+
+ document.registrationForm.ageInputId.oninput = function(){
+    document.registrationForm.ageOutputId.value = document.registrationForm.ageInputId.value;
+ }
+Either use element's Id or name, both are supported in morden browsers.
+
+shareimprove this answer
+edited Jul 7 '16 at 5:24
+answered Sep 21 '13 at 18:52
+
+Rahul R.
+2,79433 gold badges2020 silver badges3232 bronze badges
+1
++1 know I know about <output>. Only problem is that E.I doesn't support it though. (W3School) w3schools.com/tags/tryit.asp?filename=tryhtml5_output – radbyx Jun 14 '14 at 12:21
+3
+It's still javascript, and it's worse to bind oninput on form element than on input element itself. – cuixiping Oct 20 '14 at 0:19 
+2
+@cuixiping, we can bind oninput on element instead of form, i just did it to show example. – Rahul R. Oct 29 '14 at 13:38
+Forgive this late and noob question, but how does the handler refer to rangeInput and amount by their HTML names? – rep_movsd Sep 4 '15 at 18:19 
+@rep_movsd, it is same as this.formName.rangeInput or this.formName.amount. Form access the elements using their name. However I am not 100% sure, – Rahul R. Sep 10 '15 at 5:28
+show 3 more comments
+
+34
+
+version with editable input:
+
+<form>
+    <input type="range" name="amountRange" min="0" max="20" value="0" oninput="this.form.amountInput.value=this.value" />
+    <input type="number" name="amountInput" min="0" max="20" value="0" oninput="this.form.amountRange.value=this.value" />
+</form>
+http://jsfiddle.net/Xjxe6/
+
+shareimprove this answer
+answered Apr 11 '14 at 3:12
+
+d1Mm
+42155 silver badges44 bronze badges
+6
+Replace form variables with this.nextElementSibling or this.previousElementSibling and replace oninput with onchange to get a version that works outside of a form. jsfiddle.net/Xjxe6/94 – Domino Mar 23 '15 at 20:45 
+add a comment
+
+26
+
+an even better way would be to catch the input event on the input itself rather than on the whole form (performance wise) :
+
+<input type="range" id="rangeInput" name="rangeInput" min="0" max="20" value="0"
+       oninput="amount.value=rangeInput.value">                                                       
+
+<output id="amount" name="amount" for="rangeInput">0</output>
+Here's a fiddle (with the id added as per Ryan's comment).
+
+shareimprove this answer
+edited Mar 1 '18 at 17:00
+
+Roko C. Buljan
+136k2626 gold badges218218 silver badges240240 bronze badges
+answered Jan 19 '14 at 11:06
+
+Ilana Hakim
+39833 silver badges66 bronze badges
+3
+In Firefox 27, this didn't work for me until I added id="amount" for the output, too. – Ryan Mar 20 '14 at 4:38
+this should work without id: oninput="this.form.amount.value=this.value" – d1Mm Apr 11 '14 at 2:44
+1
+this works but how do I get to current value and show it when the page refreshes? :-/ – user2513846 Sep 3 '15 at 20:30
+add a comment
+
+13
+
+If you want your current value to be displayed beneath the slider and moving along with it, try this:
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>MySliderValue</title>
+
+</head>
+<body>
+  <h1>MySliderValue</h1>
+
+  <div style="position:relative; margin:auto; width:90%">
+    <span style="position:absolute; color:red; border:1px solid blue; min-width:100px;">
+    <span id="myValue"></span>
+    </span>
+    <input type="range" id="myRange" max="1000" min="0" style="width:80%"> 
+  </div>
+
+  <script type="text/javascript" charset="utf-8">
+var myRange = document.querySelector('#myRange');
+var myValue = document.querySelector('#myValue');
+var myUnits = 'myUnits';
+var off = myRange.offsetWidth / (parseInt(myRange.max) - parseInt(myRange.min));
+var px =  ((myRange.valueAsNumber - parseInt(myRange.min)) * off) - (myValue.offsetParent.offsetWidth / 2);
+
+  myValue.parentElement.style.left = px + 'px';
+  myValue.parentElement.style.top = myRange.offsetHeight + 'px';
+  myValue.innerHTML = myRange.value + ' ' + myUnits;
+
+  myRange.oninput =function(){
+    let px = ((myRange.valueAsNumber - parseInt(myRange.min)) * off) - (myValue.offsetWidth / 2);
+    myValue.innerHTML = myRange.value + ' ' + myUnits;
+    myValue.parentElement.style.left = px + 'px';
+  };
+  </script>
+
+</body>
+</html>
